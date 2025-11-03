@@ -1,7 +1,7 @@
 ---
 - name: Configure nodes in dev and qa environments
   hosts: all
-  remote_user: velocity      # ✅ correct key
+  remote_user: velocity      
   become: yes
   connection: ssh
   gather_facts: yes
@@ -21,7 +21,7 @@
         name:
           - git
           - java-17-amazon-corretto.x86_64
-        state: present     # ✅ fixed typo
+        state: present     
 
     - name: Install Docker
       yum:
