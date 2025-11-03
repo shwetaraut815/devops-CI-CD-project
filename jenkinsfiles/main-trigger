@@ -1,0 +1,43 @@
+// trigger all jobs one by one
+pipeline {
+    agent any 
+    
+    stages {
+        stage ("shutdown") {
+         steps {
+
+            build "shutdown"
+
+            } 
+       }
+        stage ("build"){
+            steps {
+
+                build "compilation"
+
+            }
+        }
+        stage ("copy") {
+            steps {
+
+                build "copy-war"
+
+            }
+
+        }
+        stage ("deploy-dev") {
+            steps {
+
+                build "docker-deploy-dev"
+
+            }
+        }
+        stage ("deploy-qa") {
+            steps {
+
+                build "docker-deploy-qa"
+                
+            }
+        }           
+    }
+}

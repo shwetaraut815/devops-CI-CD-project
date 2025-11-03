@@ -1,0 +1,29 @@
+pipeline {
+    agent{
+        label{
+            label "dev"
+            customWorkspace "/mnt/project"
+        }
+    }
+    environment {
+        composedirname = ""
+    }
+    stages {
+        stage ("shutdown-dev-env") {
+            steps {
+              sh'''
+              cd ${composedirname} && sudo docker-compose down
+              docker system prune -a -f 
+              '''
+            }
+        }
+        stage ("shutdown-qa-env") {
+            steps {
+                sh'''
+                cd ${composedirname} && sudo docker-compose down
+                docker system prune -a -f 
+                ''' 
+            }
+        }
+    }
+}

@@ -1,0 +1,40 @@
+pipeline {
+    agent {
+        label {
+            label "built-in"
+            customWorkspace "/mnt/projects"
+        }
+    }
+    triggers {
+        pollSCM('H/2 * * * *')   // poll-scm : Jenkins checks every 2 minutes
+    }
+    // triggers {            
+    // githubPush()        //github-webhooks : when any changes done in main then job triggers
+    // }
+    environment {
+        url = "https://github.com/Shantanumajan6/project.git"
+    }
+    stages{
+        stage ("git-checkout") {
+            steps {
+                sh '''
+                rm -rf *
+                git clone $url
+                '''
+            }
+        }
+        stage ("compilation") {
+            steps {
+                sh "cd project && mvn clean install -DskipTests"
+            }
+        }
+        stage ("copy") {
+            steps {
+                sh '''
+                rm -rf /mnt/wars/*
+                cp -r project/target/LoginWebApp.war /mnt/wars/
+                '''
+            }
+        }
+    }
+}

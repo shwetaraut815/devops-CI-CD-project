@@ -1,0 +1,20 @@
+- name: configure nodes in dev and qa env
+  hosts: all
+  user: velocity
+  become: yes
+  connection: ssh
+  gather_facts: yes
+
+  roles:
+    - install-docker-role
+    - docker-compose-role 
+    - install-packages-role
+
+  tasks:
+    - name: verify docker installation
+      shell:
+        docker --version
+        git --version
+        java -version 
+        docker-compose --version
+      register: output  

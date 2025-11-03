@@ -1,0 +1,28 @@
+pipeline {
+    agent {
+        label {
+            label "qa"
+            customWorkspace "/mnt/projects"
+        }
+    }
+    environment {
+        composeurl = ""
+        composedirname = ""
+    }
+    stages {
+        stage ("clone-docker-compose-file") {
+            steps {
+                sh'''
+                rm -rf *
+                git clone ${composeurl}
+                '''
+            }
+        }
+        stage ("run-compose") {
+           steps {
+                sh "cd ${composedirname} && sudo docker-compose up -d"
+           } 
+        }
+    }
+
+}

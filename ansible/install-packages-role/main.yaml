@@ -1,0 +1,12 @@
+tasks:
+    - name: update packages
+      yum:
+        name: '*'
+        state: latest
+
+    - name: install git java
+      yum:
+        name:
+          - git
+          - java-17-amazon-corretto.x86_64
+        statee: present

@@ -1,0 +1,27 @@
+pipeline {
+    agent {
+        label {
+            label "built-in"
+            customWorkspace "/mnt/wars"
+        }
+    }
+    environment {
+        dev-instance-ip = ""
+        qa-instance-ip  = ""
+    }
+    stages {
+        stage ("copy_war_dev"){
+          steps {
+            sh'''
+            scp -r LoginWebApp.war velocity@${devip}:/mnt/wars
+            '''
+          }
+        }
+         stage ("copy_war_qa"){
+          steps {
+            sh "scp -r LoginWebApp.war velocity@${qaip}:/mnt/wars"
+          }
+        }
+
+    }
+}
