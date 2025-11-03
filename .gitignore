@@ -1,0 +1,8 @@
+rm gitignore
+
+cat > .gitignore <<EOF
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+EOF
