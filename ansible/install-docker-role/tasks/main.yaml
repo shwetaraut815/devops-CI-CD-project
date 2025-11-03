@@ -1,12 +1,14 @@
+---
 - name: install docker
-      yum: 
-        name: docker
-        state: present
-      notify: start docker
+  yum:
+    name: docker
+    state: present
+  notify: start docker
 
-    - name: add user to group docker
-      user:
-        name: velocity
-        groups: docker
-        append: yes
+
+- name: add user to group docker
+  user:
+    name: velocity
+    groups: docker
+    append: yes
     
