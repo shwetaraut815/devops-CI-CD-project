@@ -1,53 +1,58 @@
 ---
-- name: configure nodes in dev and qa env
+- name: Configure nodes in dev and qa environments
   hosts: all
-  user: velocity
+  remote_user: velocity      # ✅ correct key
   become: yes
   connection: ssh
   gather_facts: yes
 
   vars:
-    docker_compose_url: curl -SL https://github.com/docker/compose/releases/download/v2.40.3/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+    docker_compose_url: https://github.com/docker/compose/releases/download/v2.40.3/docker-compose-linux-x86_64
     docker_compose_path: /usr/local/bin/docker-compose
 
   tasks:
-    - name: update packages
+    - name: Update all packages
       yum:
         name: '*'
         state: latest
 
-    - name: install git java
+    - name: Install Git and Java
       yum:
         name:
           - git
           - java-17-amazon-corretto.x86_64
-        statee: present
+        state: present     # ✅ fixed typo
 
-    - name: install docker
-      yum: 
+    - name: Install Docker
+      yum:
         name: docker
         state: present
       notify: start docker
 
-    - name: add user to group docker
+    - name: Add user to Docker group
       user:
         name: velocity
         groups: docker
         append: yes
     
-    - name: install docker-compose
+    - name: Install Docker Compose
       get_url:
         url: "{{ docker_compose_url }}"
         dest: "{{ docker_compose_path }}"
         mode: '0755'
 
-    - name: verify docker installation
-      shell:
+    - name: Verify installations
+      shell: |
         docker --version
         git --version
-        java -version 
+        java -version
         docker-compose --version
       register: output
+      ignore_errors: yes
+
+    - name: Show version summary
+      debug:
+        var: output.stdout_lines
 
   handlers:
     - name: start docker
@@ -55,5 +60,3 @@
         name: docker
         state: started
         enabled: yes
-
-

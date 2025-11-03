@@ -9,4 +9,4 @@ tasks:
         name:
           - git
           - java-17-amazon-corretto.x86_64
-        statee: present
+        state: present
