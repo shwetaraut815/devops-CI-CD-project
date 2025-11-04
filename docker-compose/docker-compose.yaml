@@ -22,7 +22,7 @@ services:
       - custom-network
 
   mysql-service:
-    image: mysql:8.0
+    image: mysql:latest-debian
     container_name: mysql-db
     restart: always
     environment:

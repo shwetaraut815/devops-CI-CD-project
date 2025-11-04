@@ -7,48 +7,6 @@ pipeline {
     }
 
     environment {
-        composeurl = 'https://github.com/shwetaraut815/devops-CI-CD-project.git'
-        composedirname = 'devops-CI-CD-project/docker-compose'
-    }
-
-    stages {
-
-        stage('Clone Docker Compose Files') {
-            steps {
-                sh '''
-                    rm -rf *
-                    git clone ${composeurl}
-                '''
-            }
-        }
-
-        stage('Update DB Config') {
-            steps {
-                sh 'bash dcker-compose/update-db-config.sh'
-            }
-        }
-
-        stage('Run Docker Compose') {
-            steps {
-                sh "cd ${composedirname} && sudo docker-compose up -d"
-            }
-        }
-
-        stage('DB Integration') {
-            steps {
-                sh '''
-                    echo "Installing MySQL client and checking tables..."
-                    docker exec mysql-container apt update -y
-                    docker exec mysql-container apt install -y default-mysql-client
-                    docker exec mysql-container mysql -pipeline {
-    agent {
-        node {
-            label 'qa'
-            customWorkspace '/mnt/projects'
-        }
-    }
-
-    environment {
         COMPOSE_URL = 'https://github.com/shwetaraut815/devops-CI-CD-project.git'
         COMPOSE_DIR = 'devops-CI-CD-project/docker-compose'
     }
@@ -68,7 +26,7 @@ pipeline {
         stage('Update DB Config') {
             steps {
                 dir("${COMPOSE_DIR}") {
-                    sh 'bash update-db-config.sh'
+                    sh 'bash update-db-config.sh'    //give proper path
                 }
             }
         }
@@ -90,7 +48,7 @@ pipeline {
             sleep 15
 
             echo "Creating database as root..."
-            docker exec mysql-db mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS test;"
+            docker exec mysql-db mysql -uadmin -padmin1234 -e "CREATE DATABASE IF NOT EXISTS test;"
 
             echo "Verifying imported tables..."
             docker exec mysql-db mysql -uadmin -padmin1234 -e "USE test; SHOW TABLES;"
@@ -99,18 +57,6 @@ pipeline {
     }
 }
 
-    }
-
-    post {
-        always {
-            sh 'docker ps -a'
-        }
-    }
-}
- -padmin1234 -e "USE mydb; SHOW TABLES;"
-                '''
-            }
-        }
     }
 
     post {
