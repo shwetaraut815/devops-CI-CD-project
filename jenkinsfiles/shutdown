@@ -6,7 +6,7 @@ pipeline {
         }
     }
     environment {
-        composedirname = ""
+        composedirname = "devops-CI-CD-project/docker-compose"
     }
     stages {
         stage ("shutdown-dev-env") {

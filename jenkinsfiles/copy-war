@@ -13,13 +13,19 @@ pipeline {
         stage ("copy_war_dev"){
           steps {
             sh'''
+            mkdir -p /mnt/wars
             scp -r LoginWebApp.war velocity@${dev_ip}:/mnt/wars
             '''
           }
         }
          stage ("copy_war_qa"){
           steps {
-            sh "scp -r LoginWebApp.war velocity@${qa_ip}:/mnt/wars"
+            sh'''
+            mkdir -p /mnt/wars
+
+            scp -r LoginWebApp.war velocity@${qa_ip}:/mnt/wars
+            '''
+          
           }
         }
 

@@ -13,7 +13,7 @@ pipeline {
         stage ("build"){
             steps {
 
-                build "compilation"
+                build "compilation-src"
 
             }
         }

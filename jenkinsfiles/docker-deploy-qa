@@ -6,8 +6,8 @@ pipeline {
         }
     }
     environment {
-        composeurl = ""
-        composedirname = ""
+        composeurl = "https://github.com/shwetaraut815/devops-CI-CD-project.git"
+        composedirname = "devops-CI-CD-project/docker-compose"
     }
     stages {
         stage ("clone-docker-compose-file") {
@@ -18,11 +18,34 @@ pipeline {
                 '''
             }
         }
+        
+        stage('Update DB Config') {
+            steps {
+                
+                sh 'bash update-db-config.sh'
+            }
+        }
+
         stage ("run-compose") {
            steps {
                 sh "cd ${composedirname} && sudo docker-compose up -d"
            } 
         }
+        stage ("db integration"){
+            steps{
+                sh'''
+                docker exec -it mysql-db bash
+                apt update && apt install -y default-mysql-client
+                docker exec mysql-container mysql -u admin -p admin1234 -e "USE mydb; SHOW TABLES;"
+                '''
+            }
+        }
+        post {
+        always {
+            sh 'docker ps -a'
+            }
+        }
+       }
     }
 
 }

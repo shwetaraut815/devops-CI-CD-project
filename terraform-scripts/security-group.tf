@@ -5,7 +5,7 @@ resource "aws_security_group" "project_sg" {
 
 
  dynamic "ingress" {
-    for_each = [22, 80, 8080]  # List of ports
+    for_each = [22, 80, 8080, 3306]  # List of ports
     content {
       description = "Allow port ${ingress.value}"
       from_port   = ingress.value
