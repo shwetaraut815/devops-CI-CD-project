@@ -1,10 +1,11 @@
 version: "3"
+
 networks:
   custom-network:
     driver: bridge
+
 volumes:
   mysql-data:
-
 
 services:
   tomcat-service:
@@ -15,15 +16,16 @@ services:
     volumes:
       - "/mnt/wars:/usr/local/tomcat/webapps"
     restart: always
-    depend_on:
-      - "mysql-service"
+    depends_on:
+      - mysql-service
     networks:
-      - "custom-network"
+      - custom-network
 
   mysql-service:
     image: mysql:5.7
     container_name: mysql-db
-    restart: alwaysenvironment:
+    restart: always
+    environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: test
       MYSQL_USER: admin
@@ -31,16 +33,13 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - "mysql-data:/var/lib/mysql"
-      
+      - mysql-data:/var/lib/mysql
       # this is where your init.sql will be automatically executed
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - custom-network
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 30s
       timeout: 10s
       retries: 5
-
-    
