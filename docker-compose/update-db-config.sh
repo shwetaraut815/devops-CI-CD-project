@@ -13,7 +13,7 @@ CONFIG=$(find "$TMP" -type f -name "userRegistration.jsp")
 
 sed -i 's/"username"/"admin"/g' "$CONFIG"
 sed -i 's/"password"/"admin1234"/g' "$CONFIG"
-sed -i 's/localhost/mysql/g' "$CONFIG"
+sed -i 's/localhost/mysql-db/g' "$CONFIG"
 
 cd "$TMP"
 zip -qr "../LoginWebApp.war" *

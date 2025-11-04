@@ -1,51 +1,121 @@
 pipeline {
     agent {
-        label {
-            label "qa"
-            customWorkspace "/mnt/projects"
+        node {
+            label 'qa'
+            customWorkspace '/mnt/projects'
         }
     }
+
     environment {
-        composeurl = "https://github.com/shwetaraut815/devops-CI-CD-project.git"
-        composedirname = "devops-CI-CD-project/docker-compose"
+        composeurl = 'https://github.com/shwetaraut815/devops-CI-CD-project.git'
+        composedirname = 'devops-CI-CD-project/docker-compose'
     }
+
     stages {
-        stage ("clone-docker-compose-file") {
+
+        stage('Clone Docker Compose Files') {
             steps {
-                sh'''
-                rm -rf *
-                git clone ${composeurl}
+                sh '''
+                    rm -rf *
+                    git clone ${composeurl}
                 '''
             }
         }
+
+        stage('Update DB Config') {
+            steps {
+                sh 'bash dcker-compose/update-db-config.sh'
+            }
+        }
+
+        stage('Run Docker Compose') {
+            steps {
+                sh "cd ${composedirname} && sudo docker-compose up -d"
+            }
+        }
+
+        stage('DB Integration') {
+            steps {
+                sh '''
+                    echo "Installing MySQL client and checking tables..."
+                    docker exec mysql-container apt update -y
+                    docker exec mysql-container apt install -y default-mysql-client
+                    docker exec mysql-container mysql -pipeline {
+    agent {
+        node {
+            label 'qa'
+            customWorkspace '/mnt/projects'
+        }
+    }
+
+    environment {
+        COMPOSE_URL = 'https://github.com/shwetaraut815/devops-CI-CD-project.git'
+        COMPOSE_DIR = 'devops-CI-CD-project/docker-compose'
+    }
+
+    stages {
+
+        stage('Clone Docker Compose Files') {
+            steps {
+                sh '''
+                    rm -rf *
+                    git clone ${COMPOSE_URL}
+                '''
+            }
+        }
+
         
         stage('Update DB Config') {
             steps {
-                
-                sh 'bash update-db-config.sh'
+                dir("${COMPOSE_DIR}") {
+                    sh 'bash update-db-config.sh'
+                }
             }
         }
 
-        stage ("run-compose") {
-           steps {
-                sh "cd ${composedirname} && sudo docker-compose up -d"
-           } 
-        }
-        stage ("db integration"){
-            steps{
-                sh'''
-                docker exec -it mysql-db bash
-                apt update && apt install -y default-mysql-client
-                docker exec mysql-container mysql -u admin -p admin1234 -e "USE mydb; SHOW TABLES;"
+        stage('Run Docker Compose') {
+            steps {
+                sh '''
+                    cd ${COMPOSE_DIR}
+                    sudo docker-compose down || true
+                    sudo docker-compose up -d
                 '''
             }
         }
-        post {
-        always {
-            sh 'docker ps -a'
-            }
-        }
-       
+
+       stage('DB Integration') {
+    steps {
+        sh '''
+            echo "Waiting for MySQL to initialize..."
+            sleep 15
+
+            echo "Creating database as root..."
+            docker exec mysql-db mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS test;"
+
+            echo "Verifying imported tables..."
+            docker exec mysql-db mysql -uadmin -padmin1234 -e "USE test; SHOW TABLES;"
+
+        '''
+    }
+}
+
     }
 
+    post {
+        always {
+            sh 'docker ps -a'
+        }
+    }
+}
+ -padmin1234 -e "USE mydb; SHOW TABLES;"
+                '''
+            }
+        }
+    }
+
+    post {
+        always {
+            sh 'docker ps -a'
+        }
+    }
 }
