@@ -6,20 +6,20 @@ pipeline {
         }
     }
     environment {
-        dev-instance-ip = ""
-        qa-instance-ip  = ""
+        dev_ip = "10.0.1.219"
+        qa_ip  = "10.0.2.207"
     }
     stages {
         stage ("copy_war_dev"){
           steps {
             sh'''
-            scp -r LoginWebApp.war velocity@${devip}:/mnt/wars
+            scp -r LoginWebApp.war velocity@${dev_ip}:/mnt/wars
             '''
           }
         }
          stage ("copy_war_qa"){
           steps {
-            sh "scp -r LoginWebApp.war velocity@${qaip}:/mnt/wars"
+            sh "scp -r LoginWebApp.war velocity@${qa_ip}:/mnt/wars"
           }
         }
 

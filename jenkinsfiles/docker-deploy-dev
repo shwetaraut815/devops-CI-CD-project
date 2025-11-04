@@ -6,8 +6,8 @@ pipeline {
         }
     }
     environment {
-        composeurl = ""
-        composedirname = ""
+        composeurl = "https://github.com/shwetaraut815/devops-CI-CD-project.git"
+        composedirname = "devops-CI-CD-project/docker-compose"
     }
     stages {
         stage ("clone-docker-compose-file") {

@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label "built-in"
+    }
 
     stages {
 
@@ -13,8 +15,9 @@ pipeline {
             steps {
                 sh '''
                     echo "Running Ansible playbook..."
-                    ansible-playbook ansible/config.yaml
+                    ansible-playbook -i ansible/inventory ansible/config.yaml
                 '''
             }
         }
     }
+}
