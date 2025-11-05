@@ -1,11 +1,11 @@
 resource "aws_security_group" "project_sg" {
 
-      name        = "project-sg"
-      vpc_id      = aws_vpc.project-vpc.id
+  name   = "project-sg"
+  vpc_id = aws_vpc.project-vpc.id
 
 
- dynamic "ingress" {
-    for_each = [22, 80, 8080, 3306]  # List of ports
+  dynamic "ingress" {
+    for_each = [22, 80, 8080, 3306] # List of ports
     content {
       description = "Allow port ${ingress.value}"
       from_port   = ingress.value
@@ -15,7 +15,7 @@ resource "aws_security_group" "project_sg" {
     }
   }
 
- egress {
+  egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"

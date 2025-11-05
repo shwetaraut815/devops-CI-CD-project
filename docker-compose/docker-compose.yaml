@@ -22,12 +22,13 @@ services:
       - custom-network
 
   mysql-service:
-    image: mysql:latest-debian
+    build:
+      dockerfile: Dockerfile  # Optional if filename is 'Dockerfile'  
     container_name: mysql-db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: test
+      MYSQL_DATABASE: test   #only this db has access
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin1234
     ports:

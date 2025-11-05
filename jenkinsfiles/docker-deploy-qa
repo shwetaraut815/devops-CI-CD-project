@@ -40,23 +40,7 @@ pipeline {
                 '''
             }
         }
-
-       stage('DB Integration') {
-    steps {
-        sh '''
-            echo "Waiting for MySQL to initialize..."
-            sleep 15
-
-            echo "Creating database as root..."
-            docker exec mysql-db mysql -uadmin -padmin1234 -e "CREATE DATABASE IF NOT EXISTS test;"
-
-            echo "Verifying imported tables..."
-            docker exec mysql-db mysql -uadmin -padmin1234 -e "USE test; SHOW TABLES;"
-
-        '''
-    }
-}
-
+        
     }
 
     post {
