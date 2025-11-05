@@ -11,7 +11,7 @@ mysql-service:
     - "3306:3306"
   volumes:
     - mysql-data:/var/lib/mysql
-    - ./docker-compose/init.sql:/docker-entrypoint-initdb.d/init.sql
+    - /mnt/projects/mysql-init:/docker-entrypoint-initdb.d
   networks:
     - custom-network
   healthcheck:

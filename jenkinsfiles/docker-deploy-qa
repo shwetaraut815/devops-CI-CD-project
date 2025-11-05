@@ -9,6 +9,8 @@ pipeline {
     environment {
         COMPOSE_URL = 'https://github.com/shwetaraut815/devops-CI-CD-project.git'
         COMPOSE_DIR = 'devops-CI-CD-project/docker-compose'
+        INIT_SQL_DIR = '/mnt/projects/mysql-init'
+
     }
 
     stages {
@@ -19,6 +21,15 @@ pipeline {
                     rm -rf *
                     git clone ${COMPOSE_URL}
                 '''
+            }
+        }
+        stage ("create bind mount") {
+            steps{
+                sh '''
+            mkdir -p ${INIT_SQL_DIR}
+              curl -L -o ${INIT_SQL_DIR}/init.sql \
+                    https://raw.githubusercontent.com/shwetaraut815/devops-CI-CD-project/main/docker-compose/init.sql
+                """
             }
         }
 
