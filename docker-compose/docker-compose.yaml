@@ -22,21 +22,18 @@ services:
       - custom-network
 
   mysql-service:
-    build:
-    context: ./docker-compose
-    dockerfile: Dockerfile  # Optional if filename is 'Dockerfile'  
+    build: ./docker-compose   # Use string path to Dockerfile folder
     container_name: mysql-db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: test   #only this db has access
+      MYSQL_DATABASE: test
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin1234
     ports:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-      # this is where your init.sql will be automatically executed
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - custom-network
