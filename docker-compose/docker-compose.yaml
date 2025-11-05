@@ -23,7 +23,7 @@ services:
 
   mysql-service:
     build:
-      dockerfile: Dockerfile  # Optional if filename is 'Dockerfile'  
+    dockerfile: Dockerfile  # Optional if filename is 'Dockerfile'  
     container_name: mysql-db
     restart: always
     environment:
