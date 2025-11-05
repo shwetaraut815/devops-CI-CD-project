@@ -23,6 +23,7 @@ services:
 
   mysql-service:
     build:
+    context: ./docker-compose
     dockerfile: Dockerfile  # Optional if filename is 'Dockerfile'  
     container_name: mysql-db
     restart: always
