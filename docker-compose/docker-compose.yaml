@@ -1,21 +1,25 @@
-mysql-service:
-  image: mysql:8.0
-  container_name: mysql-db
-  restart: always
-  environment:
-    MYSQL_ROOT_PASSWORD: root
-    MYSQL_DATABASE: test
-    MYSQL_USER: admin
-    MYSQL_PASSWORD: admin1234
-  ports:
-    - "3306:3306"
-  volumes:
-    - mysql-data:/var/lib/mysql
-    - /mnt/projects/mysql-init:/docker-entrypoint-initdb.d
-  networks:
-    - custom-network
-  healthcheck:
-    test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-    interval: 30s
-    timeout: 10s
-    retries: 5
+services:
+  tomcat-service:
+    image: tomcat:9.0
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/mnt/wars:/usr/local/tomcat/webapps"
+    depends_on:
+      - mysql-service
+
+  mysql-service:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin1234
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - /mnt/projects/mysql-init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+
+volumes:
+  mysql-data:
