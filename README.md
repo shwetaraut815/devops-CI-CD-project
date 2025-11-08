@@ -34,11 +34,11 @@ AWS VPC (Custom)
 - Secrets are dynamically injected from AWS Secrets Manager.
 
 ## Prerequisites
-- Use service account to set up connection
+- Use service account to set up passwordless ssh connection connection
 - Jenkins installed on master 
-- Terraform v1.5+ installed
-- Ansible v2.9+ installed
-- Git installed for code checkout
+- Terraform  installed
+- Ansible  installed
+- Git installed for source code management
 - AWS CLI configured for Terraform and Ansible
 
 ## Setup Instructions
