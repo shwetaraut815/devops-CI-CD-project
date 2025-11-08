@@ -92,6 +92,8 @@ Deploy QA: Deploy WAR to QA environment (manual approval optional)
 Jenkins agents execute deployment on environment-specific EC2 nodes.
 Passwordless SSH ensures secure communication between master and agents.
 
+# the application data stored in mysql contaniner having persistent volume 
+
 
 
 
